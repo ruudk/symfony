@@ -675,7 +675,7 @@ class IntegrationTest extends TestCase
         $container = new ContainerBuilder();
         $container->registerAttributeForAutoconfiguration(
             CustomAutoconfiguration::class,
-            static function (ChildDefinition $definition, CustomAutoconfiguration $attribute, \ReflectionClass $reflector) {
+            static function (ChildDefinition $definition, CustomAutoconfiguration $attribute, ReflectionClass $reflector) {
                 $definition->addTag('app.custom_tag', get_object_vars($attribute) + ['class' => $reflector->getName()]);
             }
         );
@@ -746,7 +746,7 @@ class IntegrationTest extends TestCase
         $container = new ContainerBuilder();
         $container->registerAttributeForAutoconfiguration(
             CustomMethodAttribute::class,
-            static function (ChildDefinition $definition, CustomMethodAttribute $attribute, \ReflectionMethod $reflector) {
+            static function (ChildDefinition $definition, CustomMethodAttribute $attribute, ReflectionMethod $reflector) {
                 $tagAttributes = get_object_vars($attribute);
                 $tagAttributes['method'] = $reflector->getName();
 
@@ -755,7 +755,7 @@ class IntegrationTest extends TestCase
         );
         $container->registerAttributeForAutoconfiguration(
             CustomPropertyAttribute::class,
-            static function (ChildDefinition $definition, CustomPropertyAttribute $attribute, \ReflectionProperty $reflector) {
+            static function (ChildDefinition $definition, CustomPropertyAttribute $attribute, ReflectionProperty $reflector) {
                 $tagAttributes = get_object_vars($attribute);
                 $tagAttributes['property'] = $reflector->getName();
 
@@ -764,7 +764,7 @@ class IntegrationTest extends TestCase
         );
         $container->registerAttributeForAutoconfiguration(
             CustomParameterAttribute::class,
-            static function (ChildDefinition $definition, CustomParameterAttribute $attribute, \ReflectionParameter $reflector) {
+            static function (ChildDefinition $definition, CustomParameterAttribute $attribute, ReflectionParameter $reflector) {
                 $tagAttributes = get_object_vars($attribute);
                 $tagAttributes['parameter'] = $reflector->getName();
 
@@ -773,7 +773,7 @@ class IntegrationTest extends TestCase
         );
         $container->registerAttributeForAutoconfiguration(
             CustomAnyAttribute::class,
-            static function (ChildDefinition $definition, CustomAnyAttribute $attribute, \ReflectionClass|\ReflectionMethod|\ReflectionProperty|\ReflectionParameter $reflector) {
+            static function (ChildDefinition $definition, CustomAnyAttribute $attribute, \ReflectionClass | \ReflectionMethod | \ReflectionProperty | \ReflectionParameter $reflector) {
                 $tagAttributes = get_object_vars($attribute);
                 if ($reflector instanceof ReflectionClass) {
                     $tagAttributes['class'] = $reflector->getName();
