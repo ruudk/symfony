@@ -1312,6 +1312,7 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
      * If an attribute can be used on multiple targets, a union type should be used for
      * the \Reflector parameter. Oterwise specify one \Reflector type.
      *
+     * @param class-string $attributeClass
      * @param callable(ChildDefinition, object $attribute, \ReflectionClass|\ReflectionMethod|\ReflectionProperty|\ReflectionParameter):void $configurator
      */
     public function registerAttributeForAutoconfiguration(string $attributeClass, callable $configurator): void
