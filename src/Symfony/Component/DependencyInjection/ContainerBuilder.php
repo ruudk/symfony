@@ -1309,12 +1309,12 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
     /**
      * Registers an attribute that will be used for autoconfiguring annotated classes.
      *
-     * The configurator will receive (in this order):
-     *  - a ChildDefinition instance
-     *  - the attribute instance
-     *  - the corresponding reflector (\ReflectionClass|\ReflectionMethod|\ReflectionProperty|\ReflectionParameter)
+     * If an attribute can only be used on 1 target, the \Reflector type should be narrowed to
+     * one of: \ReflectionClass|\ReflectionMethod|\ReflectionProperty|\ReflectionParameter
      *
-     * If an attribute can be used on multiple targets, a union type should be used.
+     * If an attribute can be used on multiple targets, a union type can be used based on above types.
+     *
+     * @param callable(ChildDefinition $definition, object $attribute, \Reflector $reflector): void $configurator
      */
     public function registerAttributeForAutoconfiguration(string $attributeClass, callable $configurator): void
     {
