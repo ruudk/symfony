@@ -1314,7 +1314,9 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
      *
      * If an attribute can be used on multiple targets, a union type can be used based on above types.
      *
-     * @param callable(ChildDefinition $definition, object $attribute, \Reflector $reflector): void $configurator
+     * @template T
+     * @param class-string<T> $attributeClass
+     * @param callable(ChildDefinition $definition, T $attribute, \Reflector $reflector): void $configurator
      */
     public function registerAttributeForAutoconfiguration(string $attributeClass, callable $configurator): void
     {
