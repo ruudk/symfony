@@ -39,9 +39,22 @@ class AttributeAutoconfigurationPassTest extends TestCase
     public function testAttributeConfiguratorCallableMissingType()
     {
         $this->expectException(LogicException::class);
-        $this->expectExceptionMessageMatches('/Parameter "\$reflector" in callable passed to registerAttributeForAutoconfiguration\(\) in .* on line "\d+" should have a type/');
+        $this->expectExceptionMessageMatches('/Parameter "\$reflector" in callable passed to registerAttributeForAutoconfiguration\(\) in .* on line "\d+" should have a type\. Use one or more of the following types: \\\ReflectionClass|\\\ReflectionMethod|\\\ReflectionProperty|\\\ReflectionParameter\./');
         $container = new ContainerBuilder();
         $container->registerAttributeForAutoconfiguration(AsTaggedItem::class, static function (ChildDefinition $definition, AsTaggedItem $attribute, $reflector) {});
+        $container->register('foo', \stdClass::class)
+            ->setAutoconfigured(true)
+        ;
+
+        (new AttributeAutoconfigurationPass())->process($container);
+    }
+
+    public function testAttributeConfiguratorCallableReflectorType()
+    {
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessageMatches('/Parameter "\$reflector" in callable passed to registerAttributeForAutoconfiguration\(\) in .* on line "\d+" cannot be \\\Reflector but should be one of \\\ReflectionClass|\\\ReflectionMethod|\\\ReflectionProperty|\\\ReflectionParameter or a union of multiple\./');
+        $container = new ContainerBuilder();
+        $container->registerAttributeForAutoconfiguration(AsTaggedItem::class, static function (ChildDefinition $definition, AsTaggedItem $attribute, \Reflector $reflector) {});
         $container->register('foo', \stdClass::class)
             ->setAutoconfigured(true)
         ;

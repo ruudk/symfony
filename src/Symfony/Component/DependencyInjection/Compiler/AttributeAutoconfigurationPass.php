@@ -52,6 +52,10 @@ final class AttributeAutoconfigurationPass extends AbstractRecursivePass
                 throw new LogicException(sprintf('Parameter "$%s" in callable passed to registerAttributeForAutoconfiguration() in "%s" on line "%d" should have a type. Use one or more of the following types: \ReflectionClass|\ReflectionMethod|\ReflectionProperty|\ReflectionParameter.', $reflectorParameter->getName(), $callableReflector->getFileName(), $callableReflector->getStartLine()));
             }
 
+            if (\in_array(\Reflector::class, $types, true)) {
+                throw new LogicException(sprintf('Parameter "$%s" in callable passed to registerAttributeForAutoconfiguration() in "%s" on line "%d" cannot be \Reflector but should be one of \ReflectionClass|\ReflectionMethod|\ReflectionProperty|\ReflectionParameter or a union of multiple.', $reflectorParameter->getName(), $callableReflector->getFileName(), $callableReflector->getStartLine()));
+            }
+
             if (\in_array(\ReflectionClass::class, $types, true)) {
                 $this->classAttributeConfigurators[$attributeName] = $callable;
             }
