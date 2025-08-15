@@ -13,6 +13,7 @@ CHANGELOG
    -$type = Type::iterable(Type::string(), asList: true);
    +$type = Type::list(Type::string());
    ```
+ * Add space after glue comma in GenericType
 
 7.3
 ---
