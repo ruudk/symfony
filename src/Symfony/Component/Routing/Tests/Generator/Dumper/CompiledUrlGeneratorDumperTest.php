@@ -65,6 +65,20 @@ class CompiledUrlGeneratorDumperTest extends TestCase
         $this->assertEquals('/app.php/testing2', $relativeUrlWithoutParameter);
     }
 
+    public function testDumpWithRoutePort()
+    {
+        $this->routeCollection->add('Test', new Route('/testing', port: 8080));
+        $this->routeCollection->addAlias('TestAlias', 'Test');
+
+        file_put_contents($this->testTmpFilepath, $this->generatorDumper->dump());
+
+        $projectUrlGenerator = new CompiledUrlGenerator(require $this->testTmpFilepath, new RequestContext('/app.php'));
+
+        $this->assertEquals('http://localhost:8080/app.php/testing', $projectUrlGenerator->generate('Test', [], UrlGeneratorInterface::ABSOLUTE_URL));
+        $this->assertEquals('//localhost:8080/app.php/testing', $projectUrlGenerator->generate('Test'));
+        $this->assertEquals('//localhost:8080/app.php/testing', $projectUrlGenerator->generate('TestAlias'));
+    }
+
     public function testDumpWithSimpleLocalizedRoutes()
     {
         $this->routeCollection->add('test', new Route('/foo'));

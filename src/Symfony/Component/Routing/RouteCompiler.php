@@ -35,13 +35,20 @@ class RouteCompiler implements RouteCompilerInterface
     public const VARIABLE_MAXIMUM_LENGTH = 32;
 
     /**
-     * @throws \InvalidArgumentException if a path variable is named _fragment or _firewall, or a host variable is named _firewall
+     * @throws \InvalidArgumentException if a path variable is named _fragment or _firewall, if a host variable is named
+     *                                   _firewall, or if the port is not a valid port number
      * @throws \LogicException           if a variable is referenced more than once
      * @throws \DomainException          if a variable name starts with a digit or if it is too long to be successfully used as
      *                                   a PCRE subpattern
      */
     public static function compile(Route $route): CompiledRoute
     {
+        if ('' !== $port = $route->getPort()) {
+            if (!preg_match('/^\d++$/', $port) || 1 > (int) $port || 65535 < (int) $port) {
+                throw new \InvalidArgumentException(\sprintf('Route port "%s" is not a valid port number, it must be an integer between 1 and 65535.', $port));
+            }
+        }
+
         $hostVariables = [];
         $variables = [];
         $hostRegex = null;

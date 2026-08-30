@@ -38,6 +38,7 @@ class CompiledUrlGeneratorDumper extends GeneratorDumper
                 $compiledRoute->getHostTokens(),
                 $route->getSchemes(),
                 [],
+                '' !== $route->getPort() ? (int) $route->getPort() : null,
             ];
         }
 
@@ -87,6 +88,7 @@ class CompiledUrlGeneratorDumper extends GeneratorDumper
                 $compiledTarget->getHostTokens(),
                 $target->getSchemes(),
                 $deprecations,
+                '' !== $target->getPort() ? (int) $target->getPort() : null,
             ];
         }
 

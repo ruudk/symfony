@@ -51,6 +51,7 @@ class RouterMatchCommand extends Command
                 new InputOption('method', null, InputOption::VALUE_REQUIRED, 'Set the HTTP method'),
                 new InputOption('scheme', null, InputOption::VALUE_REQUIRED, 'Set the URI scheme (usually http or https)'),
                 new InputOption('host', null, InputOption::VALUE_REQUIRED, 'Set the URI host'),
+                new InputOption('port', null, InputOption::VALUE_REQUIRED, 'Set the URI port'),
             ])
             ->setHelp(<<<'EOF'
                 The <info>%command.name%</info> shows which routes match a given request and which don't and for what reason:
@@ -59,7 +60,7 @@ class RouterMatchCommand extends Command
 
                 or
 
-                  <info>php %command.full_name% /foo --method POST --scheme https --host symfony.com --verbose</info>
+                  <info>php %command.full_name% /foo --method POST --scheme https --host symfony.com --port 8000 --verbose</info>
 
                 EOF
             )
@@ -79,6 +80,13 @@ class RouterMatchCommand extends Command
         }
         if (null !== $host = $input->getOption('host')) {
             $context->setHost($host);
+        }
+        if (null !== $port = $input->getOption('port')) {
+            if ($context->isSecure()) {
+                $context->setHttpsPort((int) $port);
+            } else {
+                $context->setHttpPort((int) $port);
+            }
         }
 
         $matcher = new TraceableUrlMatcher($this->router->getRouteCollection(), $context);

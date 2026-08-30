@@ -234,6 +234,16 @@ class RequestContext
     }
 
     /**
+     * Gets the port of the current scheme.
+     *
+     * That is the HTTPS port when the scheme is "https", the HTTP port otherwise.
+     */
+    public function getPort(): int
+    {
+        return 'https' === $this->scheme ? $this->httpsPort : $this->httpPort;
+    }
+
+    /**
      * Gets the query string without the "?".
      */
     public function getQueryString(): string

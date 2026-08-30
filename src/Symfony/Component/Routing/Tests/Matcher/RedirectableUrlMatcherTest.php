@@ -68,6 +68,21 @@ class RedirectableUrlMatcherTest extends UrlMatcherTest
         $matcher->match('/foo');
     }
 
+    public function testSchemeRedirectWithPortRestrictedRoute()
+    {
+        $coll = new RouteCollection();
+        $coll->add('foo', new Route('/foo', schemes: ['https'], port: 8443));
+
+        $matcher = $this->getUrlMatcher($coll, new RequestContext('', 'GET', 'localhost', 'http', 8080, 8443), true);
+        $matcher
+            ->expects($this->once())
+            ->method('redirect')
+            ->with('/foo', 'foo', 'https')
+            ->willReturn(['_route' => 'foo'])
+        ;
+        $matcher->match('/foo');
+    }
+
     public function testNoSchemaRedirectIfOneOfMultipleSchemesMatches()
     {
         $coll = new RouteCollection();
